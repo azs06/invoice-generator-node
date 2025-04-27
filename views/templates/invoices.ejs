@@ -1,0 +1,231 @@
+<html>
+  <head>
+    <title>Invoice generator</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      html {
+        height: 100%;
+        -webkit-print-color-adjust: exact;
+      }
+      .clearfix:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      a {
+        color: #5d6975;
+        text-decoration: underline;
+      }
+
+      body {
+        position: relative;
+        width: 100%;
+        height: 29.7cm;
+        margin: 0 auto;
+        color: #001028;
+        background: #ffffff;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-family: Arial;
+      }
+
+      header {
+        padding: 10px 0;
+        margin-bottom: 30px;
+      }
+
+      #logo {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      #logo img {
+        width: 90px;
+      }
+
+      h1 {
+        border-top: 1px solid #5d6975;
+        border-bottom: 1px solid #5d6975;
+        color: #5d6975;
+        font-size: 2.4em;
+        line-height: 1.4em;
+        font-weight: normal;
+        text-align: center;
+        margin: 0 0 20px 0;
+        background: #f5f5f5;
+      }
+
+      #project {
+        float: left;
+      }
+
+      #project span {
+        color: #5d6975;
+        text-align: right;
+        width: 80px;
+        margin-right: 10px;
+        display: inline-block;
+        font-size: 0.8em;
+      }
+
+      #company {
+        margin-right: 30px;
+        float: right;
+      }
+
+      #project div,
+      #company div {
+        white-space: nowrap;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-bottom: 20px;
+      }
+
+      table tr:nth-child(2n-1) td {
+        background: #f5f5f5;
+      }
+
+      table th,
+      table td {
+        text-align: center;
+      }
+
+      table th {
+        padding: 5px 20px;
+        color: #5d6975;
+        border-bottom: 1px solid #c1ced9;
+        white-space: nowrap;
+        font-weight: normal;
+      }
+
+      table .service,
+      table .desc {
+        text-align: left;
+      }
+
+      table td {
+        padding: 20px;
+        text-align: right;
+      }
+
+      table td.service,
+      table td.desc {
+        vertical-align: top;
+      }
+
+      table td.unit,
+      table td.qty,
+      table td.total {
+        font-size: 1.2em;
+      }
+
+      table td.grand {
+        border-top: 1px solid #5d6975;
+      }
+
+      #notices .notice {
+        color: #5d6975;
+        font-size: 1.2em;
+      }
+
+      footer {
+        color: #5d6975;
+        width: 100%;
+        height: 30px;
+        position: absolute;
+        bottom: 0;
+        border-top: 1px solid #c1ced9;
+        padding: 8px 0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="clearfix">
+      <div id="logo">
+        <img src="<%= logo %>" />
+      </div>
+      <h1>INVOICE <%= invoiceId %></h1>
+      <div id="company" class="clearfix">
+        <div>From</div>
+        <div><%= invoiceFrom %></div>
+      </div>
+      <div id="project" class="clearfix">
+        <div>To</div>
+        <div><%= invoiceTo %></div>
+        <div>Date: <%= date %></div>
+        <div>Due Date: <%= dueDate %></div>
+        <div>Terms: <%= paymentTerms %></div>
+      </div>
+    </header>
+
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th class="service">S.No.</th>
+            <th class="desc">DESCRIPTION</th>
+            <th>PRICE</th>
+            <th>QTY</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach((value, key) => { %>
+          <tr>
+            <td class="service"><%= key + 1 %></td>
+            <td class="desc"><%= value.description %></td>
+            <td class="unit"><%= value.rate %></td>
+            <td class="qty"><%= value.quantity %></td>
+            <td class="total"><%= value.amount %></td>
+          </tr>
+          <% }) %>
+
+          <tr>
+            <td colspan="4">Sub Total</td>
+            <td class="total">$<%= subTotal %></td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              Tax <% if (tax.type === 'percentage') { %> <%= tax.rate %>% <% }
+              %>
+            </td>
+            <td class="total">$<%= tax.amount %></td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              Discount <% if (discount.type === 'percentage') { %> <%=
+              discount.rate %>% <% } %>
+            </td>
+            <td class="total">-$<%= discount.amount %></td>
+          </tr>
+          <tr>
+            <td colspan="4">Shipping</td>
+            <td class="total">$<%= shipping.amount %></td>
+          </tr>
+          <tr>
+            <td colspan="4">Paid Amount</td>
+            <td class="total">$<%= amountPaid %></td>
+          </tr>
+          <tr>
+            <td colspan="4" class="grand total">Due Amount</td>
+            <td class="grand total">$<%= dueAmount %></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="notices">
+        <div>Notes:</div>
+        <div class="notice"><%= notes %></div>
+      </div>
+    </main>
+    <footer>
+      Invoice was created on a computer and is valid without the signature and
+      seal.
+    </footer>
+  </body>
+</html>
