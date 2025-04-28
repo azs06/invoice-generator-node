@@ -1,23 +1,29 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import puppeteer from 'puppeteer';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { renderFile } from 'ejs';
-import fs from 'fs';
+import express from "express";
+import bodyParser from "body-parser";
+import puppeteer from "puppeteer";
+import path from "path";
+import { fileURLToPath } from "url";
+import { renderFile } from "ejs";
+import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(bodyParser.json());
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.engine('ejs', renderFile);
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.engine("ejs", renderFile);
 
 // POST /invoice
-app.post('/invoice', async (req, res) => {
-  const requiredFields = ['invoiceFrom', 'invoiceTo'];
+app.post("/invoice", async (req, res) => {
+  const requiredFields = [
+    "invoiceFrom",
+    "invoiceTo",
+    "items",
+    "date",
+    "dueDate",
+  ];
   for (let field of requiredFields) {
     if (!req.body[field]) {
       return res.status(400).json({ message: `${field} is required` });
@@ -28,21 +34,26 @@ app.post('/invoice', async (req, res) => {
     const html = await renderInvoiceHTML(req.body);
     const pdf = await generatePDF(html);
 
-    const filename = `invoice-from-${req.body.invoiceId || 'unknown'}.pdf`;
+    const safeInvoiceId = (req.body.invoiceId || "unknown").replace(
+      /[^\w\-]/g,
+      ""
+    );
+    const filename = `invoice-${safeInvoiceId}.pdf`;
+
     res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="${filename}"`,
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${filename}"`,
     });
     res.send(pdf);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'PDF generation failed' });
+    res.status(500).json({ message: "PDF generation failed" });
   }
 });
 
 async function renderInvoiceHTML(data) {
   return new Promise((resolve, reject) => {
-    const viewPath = path.join(__dirname, 'views', 'template.ejs');
+    const viewPath = path.join(__dirname, "views", "template.ejs");
     renderFile(viewPath, data, (err, str) => {
       if (err) reject(err);
       else resolve(str);
@@ -52,14 +63,14 @@ async function renderInvoiceHTML(data) {
 
 async function generatePDF(html) {
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: 'networkidle0' });
+  await page.setContent(html, { waitUntil: "networkidle0" });
 
   const pdf = await page.pdf({
-    format: 'A4',
-    margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' },
+    format: "A4",
+    margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
   });
 
   await browser.close();
