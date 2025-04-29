@@ -1,13 +1,14 @@
 import express from "express";
 import bodyParser from "body-parser";
-import puppeteer from "puppeteer";
 import path from "path";
 import { fileURLToPath } from "url";
 import { renderFile } from "ejs";
-import fs from "fs";
+import os from "os";
+import { chromium } from "playwright";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const isMac = os.platform() === "darwin";
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,7 +32,7 @@ app.post("/invoice", async (req, res) => {
   }
 
   try {
-    const html = await renderInvoiceHTML(req.body);
+    const html = await renderInvoiceHTML({ invoice: req.body });
     const pdf = await generatePDF(html);
 
     const safeInvoiceId = (req.body.invoiceId || "unknown").replace(
@@ -61,16 +62,19 @@ async function renderInvoiceHTML(data) {
   });
 }
 
+
 async function generatePDF(html) {
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  const browser = await chromium.launch({
+    headless: true,
   });
+
   const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: "networkidle0" });
+  await page.setContent(html, { waitUntil: "networkidle" });
 
   const pdf = await page.pdf({
     format: "A4",
     margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
+    printBackground: true,
   });
 
   await browser.close();
