@@ -4,47 +4,64 @@
     <meta charset="utf-8" />
     <title>Invoice</title>
 
-    <!-- Load TailwindCSS for proper rendering -->
+    <!-- Load TailwindCSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
     <style>
       html {
         -webkit-print-color-adjust: exact;
       }
     </style>
   </head>
-  <body class="bg-white text-gray-900 p-10">
-    <div class="max-w-4xl mx-auto">
+  <body class="bg-white text-gray-900 p-10 text-sm">
+    <%
+      function fmt(val) {
+        return isNaN(parseFloat(val)) ? '0.00' : parseFloat(val).toFixed(2);
+      }
+    %>
 
+    <div class="max-w-4xl mx-auto">
       <% if (invoice.logo) { %>
-      <div class="text-center mb-10">
-        <img src="<%= invoice.logo %>" alt="Logo" class="h-20 mx-auto" />
-      </div>
+        <div class="text-center mb-10">
+          <img src="<%= invoice.logo %>" alt="Logo" class="h-20 mx-auto object-contain" />
+        </div>
       <% } %>
+
+      <div class="flex justify-between items-center mb-6">
+        <div class="text-left">
+          <% if (invoice.invoiceNumber) { %>
+            <div class="text-lg font-bold">
+              Invoice #: <%= invoice.invoiceNumber %>
+            </div>
+          <% } %>
+        </div>
+
+        <% if (typeof invoice.paid !== 'undefined') { %>
+          <div class="inline-block px-4 py-1 text-white font-bold rounded-full text-sm
+            <%= invoice.paid ? 'bg-green-500' : 'bg-orange-400' %>">
+            <%= invoice.paid ? 'PAID' : 'UNPAID' %>
+          </div>
+        <% } %>
+      </div>
 
       <div class="flex justify-between mb-10">
         <div>
-          <h2 class="text-lg font-semibold">From</h2>
-          <p><%= invoice.invoiceFrom %></p>
+          <h2 class="text-base font-semibold">From</h2>
+          <p><%= invoice.invoiceFrom || '' %></p>
         </div>
         <div class="text-right">
-          <h2 class="text-lg font-semibold">To</h2>
-          <p><%= invoice.invoiceTo %></p>
+          <h2 class="text-base font-semibold">To</h2>
+          <p><%= invoice.invoiceTo || '' %></p>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4 mb-10">
         <div>
-          <p class="font-semibold">Invoice Number:</p>
-          <p><%= invoice.invoiceNumber %></p>
-        </div>
-        <div>
           <p class="font-semibold">Invoice Date:</p>
-          <p><%= invoice.date %></p>
+          <p><%= invoice.date || '' %></p>
         </div>
         <div>
           <p class="font-semibold">Due Date:</p>
-          <p><%= invoice.dueDate %></p>
+          <p><%= invoice.dueDate || '' %></p>
         </div>
         <div>
           <p class="font-semibold">Terms:</p>
@@ -62,49 +79,38 @@
           </tr>
         </thead>
         <tbody>
-          <% invoice.items.forEach(item => { %>
+          <% (invoice.items || []).forEach(item => { %>
           <tr>
-            <td class="p-2 border"><%= item.name %></td>
-            <td class="p-2 border text-right">$<%= parseFloat(item.price).toFixed(2) %></td>
-            <td class="p-2 border text-right"><%= item.quantity %></td>
-            <td class="p-2 border text-right">$<%= (item.amount || (item.price * item.quantity)).toFixed(2) %></td>
+            <td class="p-2 border"><%= item.name || '' %></td>
+            <td class="p-2 border text-right">$<%= fmt(item.price) %></td>
+            <td class="p-2 border text-right"><%= item.quantity || 0 %></td>
+            <td class="p-2 border text-right">
+              $<%= fmt(item.amount || (item.price * item.quantity)) %>
+            </td>
           </tr>
           <% }) %>
         </tbody>
       </table>
 
       <div class="text-right space-y-2 mb-10">
-        <div>
-          <span class="font-semibold">Subtotal:</span> 
-          $<%= parseFloat(invoice.subTotal).toFixed(2) %>
-        </div>
-        <div>
-          <span class="font-semibold">Discount:</span> 
-          -$<%= parseFloat(invoice.discount.amount).toFixed(2) %>
-        </div>
-        <div>
-          <span class="font-semibold">Tax:</span> 
-          $<%= parseFloat(invoice.tax.amount).toFixed(2) %>
-        </div>
-        <div>
-          <span class="font-semibold">Shipping:</span> 
-          $<%= parseFloat(invoice.shipping.amount).toFixed(2) %>
-        </div>
+        <div><span class="font-semibold">Subtotal:</span> $<%= fmt(invoice.subTotal) %></div>
+        <div><span class="font-semibold">Discount:</span> -$<%= fmt(invoice.discount?.amount) %></div>
+        <div><span class="font-semibold">Tax:</span> $<%= fmt(invoice.tax?.amount) %></div>
+        <div><span class="font-semibold">Shipping:</span> $<%= fmt(invoice.shipping?.amount) %></div>
         <div class="text-xl font-bold mt-4">
-          Total Paid: $<%= parseFloat(invoice.amountPaid).toFixed(2) %>
+          Total Paid: $<%= fmt(invoice.amountPaid) %>
         </div>
         <div class="text-red-600 font-bold">
-          Due Amount: $<%= parseFloat(invoice.dueAmount).toFixed(2) %>
+          Due Amount: $<%= fmt(invoice.dueAmount) %>
         </div>
       </div>
 
       <% if (invoice.notes) { %>
-      <div class="mt-10">
-        <h2 class="text-lg font-semibold mb-2">Notes</h2>
-        <p><%= invoice.notes %></p>
-      </div>
+        <div class="mt-10">
+          <h2 class="text-base font-semibold mb-2">Notes</h2>
+          <p><%= invoice.notes %></p>
+        </div>
       <% } %>
-
     </div>
   </body>
 </html>

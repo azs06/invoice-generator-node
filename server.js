@@ -42,10 +42,10 @@ app.post("/invoice", async (req, res) => {
     const filename = `invoice-${safeInvoiceId}.pdf`;
 
     res.set({
-      "Content-Type": "application/pdf",
+      "Content-Type": "text/html; charset=utf-8",
       "Content-Disposition": `attachment; filename="${filename}"`,
     });
-    res.send(pdf);
+    res.send(html);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "PDF generation failed" });

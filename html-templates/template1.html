@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Invoice</title>
+
+    <!-- Load TailwindCSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        -webkit-print-color-adjust: exact;
+      }
+      .invoice-paper {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        max-width: 56rem;
+        overflow: hidden;
+        border-radius: var(--radius);
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+        --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+          0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+          0 4px 6px -4px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+          var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+      }
+
+      .invoice-header {
+        --tw-text-opacity: 1;
+        background-image: linear-gradient(to right,#3b82f6, #60a5fa);
+        padding: 1.5rem;
+        color: rgb(255 255 255 / var(--tw-text-opacity));
+      }
+
+      .invoice-section {
+        border-bottom-width: 1px;
+        --tw-border-opacity: 1;
+        border-color: rgb(243 244 246 / var(--tw-border-opacity));
+        padding: 1.5rem;
+      }
+
+      .invoice-table-header {
+        background-color: hsl(var(--secondary));
+        font-weight: 500;
+        color: hsl(var(--secondary-foreground));
+      }
+
+      .invoice-table-row {
+        border-bottom-width: 1px;
+        --tw-border-opacity: 1;
+        border-color: rgb(243 244 246 / var(--tw-border-opacity));
+        transition-property: color, background-color, border-color,
+          text-decoration-color, fill, stroke;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 0.15s;
+      }
+
+      .invoice-table-row:hover {
+        --tw-bg-opacity: 1;
+        background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+      }
+
+      .invoice-footer {
+        padding: 1.5rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        color: hsl(var(--muted-foreground));
+      }
+    </style>
+  </head>
+  <body class="bg-white text-gray-900 p-10 text-sm">
+    <main class="min-h-screen bg-gray-100 py-8 px-4">
+      <section class="max-w-5xl mx-auto">
+        <div class="invoice-paper">
+          <div class="invoice-header">
+            <div class="flex justify-between items-start">
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-file-text h-12 w-12 mr-4"
+                >
+                  <path
+                    d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                  ></path>
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                  <path d="M10 9H8"></path>
+                  <path d="M16 13H8"></path>
+                  <path d="M16 17H8"></path>
+                </svg>
+                <div>
+                  <h1 class="text-3xl font-bold">Acme Corporation</h1>
+                  <p class="opacity-75">Invoice #INV-2025-0001</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <h2 class="text-xl font-semibold">INVOICE</h2>
+                <div class="mt-2">
+                  <p>Date: 2025-04-29</p>
+                  <p>Due Date: 2025-05-13</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="invoice-section grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-sm font-medium uppercase text-gray-500 mb-2">
+                From
+              </h3>
+              <div>
+                <p class="font-semibold">Acme Corporation</p>
+                <p>123 Business Road</p>
+                <p>San Francisco, CA, 94107</p>
+                <p class="mt-2">Phone: (555) 123-4567</p>
+                <p>Email: billing@acmecorp.com</p>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium uppercase text-gray-500 mb-2">
+                To
+              </h3>
+              <div>
+                <p class="font-semibold">Globex Industries</p>
+                <p>456 Client Avenue</p>
+                <p>New York, NY, 10001</p>
+                <p class="mt-2">Email: accounts@globex.com</p>
+              </div>
+            </div>
+          </div>
+          <div class="invoice-section overflow-x-auto">
+            <h3 class="text-sm font-medium uppercase text-gray-500 mb-4">
+              Items
+            </h3>
+            <table class="min-w-full">
+              <thead>
+                <tr class="invoice-table-header">
+                  <th class="px-4 py-3 text-left">Description</th>
+                  <th class="px-4 py-3 text-right">Quantity</th>
+                  <th class="px-4 py-3 text-right">Unit Price</th>
+                  <th class="px-4 py-3 text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="invoice-table-row">
+                  <td class="px-4 py-3 text-left">
+                    Website Design &amp; Development
+                  </td>
+                  <td class="px-4 py-3 text-right">1</td>
+                  <td class="px-4 py-3 text-right">$3,500.00</td>
+                  <td class="px-4 py-3 text-right font-medium">$3,500.00</td>
+                </tr>
+                <tr class="invoice-table-row">
+                  <td class="px-4 py-3 text-left">SEO Optimization</td>
+                  <td class="px-4 py-3 text-right">10</td>
+                  <td class="px-4 py-3 text-right">$150.00</td>
+                  <td class="px-4 py-3 text-right font-medium">$1,500.00</td>
+                </tr>
+                <tr class="invoice-table-row">
+                  <td class="px-4 py-3 text-left">Content Creation</td>
+                  <td class="px-4 py-3 text-right">5</td>
+                  <td class="px-4 py-3 text-right">$200.00</td>
+                  <td class="px-4 py-3 text-right font-medium">$1,000.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="invoice-section">
+            <div class="flex justify-end">
+              <div class="w-full max-w-xs">
+                <div class="flex justify-between py-2">
+                  <span class="text-gray-600">Subtotal:</span
+                  ><span>$6,000.00</span>
+                </div>
+                <div class="flex justify-between py-2">
+                  <span class="text-gray-600">Tax (7.5%):</span
+                  ><span>$450.00</span>
+                </div>
+                <div
+                  class="flex justify-between py-3 border-t border-gray-200 font-medium text-lg"
+                >
+                  <span>Total:</span><span class="text-primary">$6,450.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="invoice-footer">
+            <div class="mb-4">
+              <h4 class="text-sm font-medium uppercase text-gray-500 mb-2">
+                Notes
+              </h4>
+              <p>
+                Payment is due within 14 days from the date of invoice. Please
+                make payment via bank transfer.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-sm font-medium uppercase text-gray-500 mb-2">
+                Terms &amp; Conditions
+              </h4>
+              <p>
+                This invoice is subject to our standard terms and conditions
+                available at www.acmecorp.com/terms
+              </p>
+            </div>
+            <div class="mt-8 text-center text-gray-500 pt-4 border-t">
+              <p>Thank you for your business!</p>
+            </div>
+          </div>
+          <div
+            class="flex justify-end gap-2 p-4 bg-gray-50 border-t border-gray-100"
+          >
+            <button
+              class="justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 flex items-center gap-1"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-printer h-4 w-4"
+              >
+                <path
+                  d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
+                ></path>
+                <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path>
+                <rect x="6" y="14" width="12" height="8" rx="1"></rect></svg
+              ><span>Print</span></button
+            ><button
+              class="justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 flex items-center gap-1"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-file-text h-4 w-4"
+              >
+                <path
+                  d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                ></path>
+                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                <path d="M10 9H8"></path>
+                <path d="M16 13H8"></path>
+                <path d="M16 17H8"></path></svg
+              ><span>PDF</span></button
+            ><button
+              class="justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-md px-3 flex items-center gap-1"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-save h-4 w-4"
+              >
+                <path
+                  d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+                ></path>
+                <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"></path>
+                <path d="M7 3v4a1 1 0 0 0 1 1h7"></path></svg
+              ><span>Save</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

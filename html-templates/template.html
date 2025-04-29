@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Invoice</title>
+
+    <!-- Load TailwindCSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        -webkit-print-color-adjust: exact;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-gray-900 p-10 text-sm">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-10 bg-black">
+        <img
+          src="https://jamstack.io/cdn/shop/files/Group_316_2x_dc87e138-fa52-4c2d-9124-eabe5127ac55_300x300.png?v=1726232631"
+          alt="Logo"
+          class="h-20 mx-auto object-contain"
+        />
+      </div>
+
+      <div class="flex justify-between items-center mb-6">
+        <div class="text-left">
+          <div
+            class="inline-block px-4 py-2 text-white font-bold rounded-full text-sm bg-red-400"
+          >
+            UNPAID
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between mb-10">
+        <div>
+          <h2 class="text-base font-semibold">From:</h2>
+          <p>ReformedTech</p>
+        </div>
+        <div class="text-right">
+          <h2 class="text-base font-semibold">To:</h2>
+          <p>Growing Being</p>
+        </div>
+      </div>
+      <div class="flex justify-between">
+        <div class="grid grid-cols-1 gap-4 mb-10">
+          <div class="mb-4">
+            <p class="font-semibold">Invoice Date:</p>
+            <p>2025-04-29</p>
+          </div>
+          <div>
+            <p class="font-semibold">Payment Terms:</p>
+            <p>Must be paid on time</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-semibold">Due Date:</p>
+          <p>2025-05-29</p>
+        </div>
+      </div>
+
+      <table class="w-full table-auto mb-10 border border-gray-300">
+        <thead>
+          <tr class="bg-gray-100 text-left">
+            <th class="p-2 border">Item</th>
+            <th class="p-2 border text-right">Price</th>
+            <th class="p-2 border text-right">Qty</th>
+            <th class="p-2 border text-right">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p-2 border">Consulting Service</td>
+            <td class="p-2 border text-right">$500.04</td>
+            <td class="p-2 border text-right">1</td>
+            <td class="p-2 border text-right">$500.04</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="text-right space-y-2 mb-10">
+        <div><span class="font-semibold">Subtotal:</span> $0.00</div>
+        <div><span class="font-semibold">Discount:</span> -$0.00</div>
+        <div><span class="font-semibold">Tax:</span> $0.00</div>
+        <div><span class="font-semibold">Shipping:</span> $0.00</div>
+        <div class="text-xl font-bold mt-4">Total Paid: $0.00</div>
+        <div class="text-red-600 font-bold">Due Amount: $0.00</div>
+      </div>
+
+      <div class="mt-10">
+        <h2 class="text-base font-semibold mb-2">Notes:</h2>
+        <p>Must be sent to a bank account via wire transfer</p>
+      </div>
+      <div class="mt-10">
+        <h2 class="text-base font-semibold mb-2">Terms and Conditions:</h2>
+        <p>Must be sent to a bank account via wire transfer</p>
+      </div>
+    </div>
+  </body>
+</html>
